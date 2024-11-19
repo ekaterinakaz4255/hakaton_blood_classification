@@ -7,9 +7,9 @@ apt install sqlite3
 pip install - r requirements.txt
 ```
 ## changes
-moved to form 
-redirect to result page on submit button 
-moved storage to sqlite backend with sqlalchemy 
+moved to form\
+redirect to result page on submit button\
+moved storage to sqlite backend with sqlalchemy\
 ## usage 
 to list all reports use:
 ```
