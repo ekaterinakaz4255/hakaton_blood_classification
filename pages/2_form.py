@@ -6,6 +6,8 @@ import time
 
 # Настройка страницы
 st.set_page_config(page_title="SharkLab Assistant", page_icon="🦈", layout="wide")
+form_oak = st.Page('pages/2_form.py', title='Форма ввода данных', icon=":material/add_circle:")
+pg = st.navigation([form_oak])
 # db conn
 #conn = st.connection('gbd', type='sql')
 sql_engine = sqlalchemy.create_engine('sqlite:///gbd.db', echo=False)
@@ -46,12 +48,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 #Акула с инфо блоком + инфа про *
-# Две колонки: текст справа, изображение слева
-with st.form(key='gbd'):
-    col1, col2 = st.columns(2, vertical_alignment="center")
-#Текс
-    with col1:
-        st.markdown(
+col1, col2 = st.columns(2, vertical_alignment="center")
+#Текст
+with col1:
+    st.markdown(
             """
             <div class="info-box">
             <p>Тогда заполни, пожалуйста, поля с показателями из своего бланка анализа ОАК (общего анализа крови).</p>
@@ -61,9 +61,10 @@ with st.form(key='gbd'):
             unsafe_allow_html=True,
         )
     #Изображение
-    with col2:
-        st.image("images/sticker.png", width=300, use_container_width=False)
-
+with col2:
+    st.image("images/sticker.png", width=300, use_container_width=False)
+# Две колонки: текст справа, изображение слева
+with st.form(key='gbd'):
     #Блок личная информация
     st.markdown(
         """
