@@ -6,8 +6,7 @@ import time
 
 # Настройка страницы
 st.set_page_config(page_title="SharkLab Assistant", page_icon="🦈", layout="wide")
-form_oak = st.Page('pages/2_form.py', title='Форма ввода данных', icon=":material/add_circle:")
-pg = st.navigation([form_oak])
+
 # db conn
 #conn = st.connection('gbd', type='sql')
 sql_engine = sqlalchemy.create_engine('sqlite:///gbd.db', echo=False)
