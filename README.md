@@ -1,3 +1,14 @@
+<h1 align="center">Hi there, I'm Kate K.</a> 
+<img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/></h1>
+<h3 align="center">Data analysis master student from Russia
+
+
+#### ⭐ Currently learning Python, Statistics, Machine Learning 
+
+#### 😍 I am interested in bioinformatics, medical researches, data analysis 
+
+
+
 # hakaton_blood_classification
 
 ## usage:
