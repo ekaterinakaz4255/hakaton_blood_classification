@@ -9,7 +9,7 @@ st.set_page_config(page_title="SharkLab Assistant", page_icon="🦈", layout="wi
 
 # db conn
 #conn = st.connection('gbd', type='sql')
-sql_engine = sqlalchemy.create_engine('sqlite:///gbd.db', echo=False)
+sql_engine = sqlalchemy.create_engine('sqlite:///data/gbd.db', echo=False)
 conn = sql_engine.raw_connection()
 
 # CSS-стили для размещения элементов
