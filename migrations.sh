@@ -2,12 +2,11 @@
 if ! command -v sqlite3 2>&1 >/dev/null
 then
     echo "sqlite3 could not be found"
-	sudo apt install sqlite3
     exit 1
 fi
 
-if [ ! -f ./gbd.db ]; then
-	sqlite3 gbd.db <<EOF
+if [ ! -f ./data/gbd.db ]; then
+	sqlite3 ./data/gbd.db <<EOF
 CREATE TABLE IF NOT EXISTS "gbd_ng" (
   "id" INTEGER PRIMARY KEY,
   "gender" TEXT,
@@ -26,6 +25,6 @@ CREATE TABLE IF NOT EXISTS "gbd_ng" (
 CREATE INDEX "ix_gbd_ng_index"ON "gbd_ng" ("id");
 EOF
 else 
-	echo "./gbd.db already exist"
+	echo "./data/gbd.db already exist"
 fi
 
