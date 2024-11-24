@@ -31,6 +31,7 @@ pyarrow==18.0.0
 pydeck==0.9.1
 Pygments==2.18.0
 pyparsing==3.2.0
+pyreadstat==1.2.8
 python-dateutil==2.9.0.post0
 pytz==2024.2
 referencing==0.35.1
