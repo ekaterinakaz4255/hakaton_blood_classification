@@ -558,3 +558,65 @@ def get_eo_leico_norm():
 def get_ba_leico_norm():
     """Возвращает норму содержания базофилов в лейкоцитарной формуле (BA_LEICO)."""
     return "0:2"
+
+# Функция для проверки отклонений от норм
+def check_norms(row):
+    """
+    Проверяет отклонения от нормы для заданной строки данных.
+    Возвращает словарь с отклонениями.
+    """
+    age = row["Age"]
+    gender = row["Sex"]
+    out_of_norm = {}
+    
+    norms_functions = {
+        "HGB": get_hgb_norm,
+        "HCT": get_hct_norm,
+        "MCV": get_mcv_norm,
+        "MPV": get_mpv_norm,
+        "MCH": get_mch_norm,
+        "MCHC": get_mchc_norm,
+        "RBC": get_rbc_norm,
+        "PLT": get_plt_norm,
+        "WBC": get_wbc_norm,
+        "PCT": get_pct_norm,
+        "LY_REL": get_ly_rel_norm,
+        "LY_ABS": get_ly_abs_norm,
+        "NE_REL": get_ne_rel_norm,
+        "NE_ABS": get_ne_abs_norm,
+        "MO_REL": get_mo_rel_norm,
+        "MO_ABS": get_mo_abs_norm,
+        "EO_REL": get_eo_rel_norm,
+        "EO_ABS": get_eo_abs_norm,
+        "BA_REL": get_ba_rel_norm,
+        "BA_ABS": get_ba_abs_norm,
+        "BAND_NEUT": get_band_neut_norm,
+        "SEGM_NEUT": get_segm_neut_norm,
+        "LY_LEICO": get_ly_leico_norm,
+        "MO_LEICO": get_mo_leico_norm,
+        "EO_LEICO": get_eo_leico_norm,
+        "BA_LEICO": get_ba_leico_norm,
+        "ESR_Westergren": get_esr_norm,
+        "RDW": get_rdw_norm,
+        "RDW_SD": get_rdw_sd_norm,
+        "RDW_CV": get_rdw_cv_norm,
+        "PDW": get_pdw_norm,
+    }
+
+    for param, get_norm_fn in norms_functions.items():
+        if param in row:
+            try:
+                if get_norm_fn.__code__.co_argcount == 2:
+                    norm = get_norm_fn(age, gender)
+                elif get_norm_fn.__code__.co_argcount == 1:
+                    norm = get_norm_fn(age)
+                else:
+                    norm = get_norm_fn()
+                
+                lower, upper = map(float, norm.split(":"))
+                value = row[param]
+                if not (lower <= value <= upper):
+                    out_of_norm[param] = f"{value} (норма: {norm})"
+            except Exception as e:
+                print(f"Ошибка при проверке нормы для {param}: {e}")
+    return out_of_norm
