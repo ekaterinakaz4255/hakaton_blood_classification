@@ -202,17 +202,17 @@ with st.form(key='gbd'):
     #Формы для ввода параметров лейкоцитарной формулы
     col9, col10, col11 = st.columns([1, 1, 1])
     with col9:
-        st.number_input("Лимфоциты # (LY#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
-        st.number_input("Моноциты # (MO#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
+        ly_leico = st.number_input("Лимфоциты # (LY#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
+        mo_leico = st.number_input("Моноциты # (MO#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
 
     with col10:
-        st.number_input("Нейтрофилы # (NE#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
-        st.number_input("Палочкоядерные нейтрофилы:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
-        st.number_input("Сегментоядерные нейтрофилы:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
+        esr_westergen = st.number_input("ESR_WESTERGEN", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
+        band_neut = st.number_input("Палочкоядерные нейтрофилы:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
+        segm_neut = st.number_input("Сегментоядерные нейтрофилы:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
     
     with col11:
-        st.number_input("Эозинофилы # (EO#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
-        st.number_input("Базофилы # (BA#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
+        eo_leico = st.number_input("Эозинофилы # (EO#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
+        ba_leico = st.number_input("Базофилы # (BA#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
 
 #Кнопка для расчета и вывода результатов с ограничением заполнения обязательных полей
     st.write("")
@@ -229,12 +229,14 @@ with st.form(key='gbd'):
             if any(field is None for field in required_fields):
                 st.error("Пожалуйста, заполните все обязательные поля!")
             else:
-                df = pd.DataFrame([required_fields], columns=['Sex', 'date_of_birth', 'Weight', 'Height', 
-                                                              'WBC', 'RBC', 'HGB', 'HCT', 'PLT', 'PCT', 'MPV', 'MCV',
-                                                              'MCH', 'MCHC', 'PDW', 'RDW', 'RDW_SD', 'RDW_CV', 'LY_REL', 'MO_REL', 'NE_REL', 'EO_REL',
-                                                              'BA_REL', 'COLOR_INDEX', 'LY_ABS', 'MO_ABS', 'NE_ABS', 'EO_ABS', 'BA_ABS', 'BAND_NEUT',
-                                                              'SEGM_NEUT', 'LY_LEICO', 'MO_LEICO', 'EO_LEICO', 'BA_LEICO', 'ESR_Westergren'
-                                                              ])
+                required_fields.extend([wbs, rbs, hgb, hct, plt, pct, mpv, pdw, rdw, rdw_sd, rdw_cv, ly_rel, mo_rel, ne_rel, eo_rel,
+                                             ba_rel, color_index, band_neut, segm_neut, ly_leico, mo_leico, eo_leico, ba_leico, esr_westergen]),
+                df = pd.DataFrame([required_fields],columns=['Sex', 'date_of_birth', 'Height', 'Weight',
+        'MCV', 'MCH', 'MCHC', 'LY_ABS', 'MO_ABS', 'NE_ABS', 'EO_ABS', 'BA_ABS',
+        'WBC', 'RBC', 'HGB', 'HCT', 'PLT', 'PCT', 'MPV',  'PDW', 'RDW', 'RDW_SD', 'RDW_CV', 'LY_REL', 'MO_REL', 'NE_REL', 'EO_REL',
+        'BA_REL', 'COLOR_INDEX',  'BAND_NEUT',
+        'SEGM_NEUT', 'LY_LEICO', 'MO_LEICO', 'EO_LEICO', 'BA_LEICO', 'ESR_Westergren'
+        ])
                 df.to_sql("gbd_ng", conn, if_exists="append", index=False)
                 st.success("Форма успешно отправлена!")
                 time.sleep(5)
