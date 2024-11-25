@@ -229,8 +229,12 @@ with st.form(key='gbd'):
             if any(field is None for field in required_fields):
                 st.error("Пожалуйста, заполните все обязательные поля!")
             else:
-                df = pd.DataFrame([required_fields], columns=['gender', 'date_of_birth', 'height', 'weight', 'mcv', 'mch', 'mchc',
-                'ly_abs', 'mo_abs', 'ne_abs', 'eo_abs', 'ba_abs'])
+                df = pd.DataFrame([required_fields], columns=['Sex', 'date_of_birth', 'Weight', 'Height', 
+                                                              'WBC', 'RBC', 'HGB', 'HCT', 'PLT', 'PCT', 'MPV', 'MCV',
+                                                              'MCH', 'MCHC', 'PDW', 'RDW', 'RDW_SD', 'RDW_CV', 'LY_REL', 'MO_REL', 'NE_REL', 'EO_REL',
+                                                              'BA_REL', 'COLOR_INDEX', 'LY_ABS', 'MO_ABS', 'NE_ABS', 'EO_ABS', 'BA_ABS', 'BAND_NEUT',
+                                                              'SEGM_NEUT', 'LY_LEICO', 'MO_LEICO', 'EO_LEICO', 'BA_LEICO', 'ESR_Westergren'
+                                                              ])
                 df.to_sql("gbd_ng", conn, if_exists="append", index=False)
                 st.success("Форма успешно отправлена!")
                 time.sleep(5)
