@@ -1,6 +1,8 @@
 import streamlit as st
+from app import classify_diagnosis
 from streamlit_lottie import st_lottie
 import json
+import time
 
 # Настройка страницы
 st.set_page_config(page_title="SharkLab Assistant", page_icon="🦈", layout="wide")
@@ -63,8 +65,19 @@ with col1:
 with col2:
     st.image("images/image2.png", width=450, use_container_width=False)
 
-st.write("")
-col3, col4, col5 = st.columns([1, 1, 1])
-with col4:
-    if st.button("Хочешь заполнить еще раз?"):
-        st.switch_page("pages/2_form.py")
+    st.write("")
+    #col3, col4, col5 = st.columns([1, 1, 1])
+    with st.spinner("The magic of our AI has started...."):
+        time.sleep(10)
+        try:
+            form_id = st.session_state['user_form_id']
+            label =  classify_diagnosis.diagnosis_classifier(form_id)
+            st.success("We predict your diagnose to be: "+ label)
+        except KeyError:
+                st.error("Can't find requested form results")
+        except Exception as e:
+                st.error(f"We apologize something went wrong 🙇 {e}")
+    
+    #with col4:
+        if st.button("Хочешь заполнить еще раз?"):
+            st.switch_page("pages/2_form.py")

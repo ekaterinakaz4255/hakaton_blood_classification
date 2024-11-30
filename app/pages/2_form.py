@@ -1,5 +1,6 @@
 import streamlit as st
 import sqlalchemy
+from sqlalchemy.orm import Session
 import datetime
 import pandas as pd
 import time
@@ -11,6 +12,11 @@ st.set_page_config(page_title="SharkLab Assistant", page_icon="🦈", layout="wi
 #conn = st.connection('gbd', type='sql')
 sql_engine = sqlalchemy.create_engine('sqlite:///data/gbd.db', echo=False)
 conn = sql_engine.raw_connection()
+
+@st.cache_resource
+def get_database_session():
+    # Create a database session object that points to the URL.
+    return Session(sql_engine)
 
 # CSS-стили для размещения элементов
 st.markdown(
@@ -215,9 +221,6 @@ with st.form(key='gbd'):
         ba_leico = st.number_input("Базофилы # (BA#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
 
 #Кнопка для расчета и вывода результатов с ограничением заполнения обязательных полей
-    st.write("")
-    st.write("")
-    st.write("")    
     col12, col13, col14 = st.columns([1, 1, 1])
 
     with col13:
@@ -237,10 +240,13 @@ with st.form(key='gbd'):
         'BA_REL', 'COLOR_INDEX',  'BAND_NEUT',
         'SEGM_NEUT', 'LY_LEICO', 'MO_LEICO', 'EO_LEICO', 'BA_LEICO', 'ESR_Westergren'
         ])
-                df.to_sql("gbd_ng", conn, if_exists="append", index=False)
+                with get_database_session() as session:
+                    df.to_sql("gbd_ng", conn, if_exists="append", index=False)
+                    res = conn.execute('SELECT max(id) FROM gbd_ng')
+                    session.commit()
+                for row in res:
+                    last_id = int(str(row[0]))
+                st.session_state['user_form_id'] = last_id
                 st.success("Форма успешно отправлена!")
-                time.sleep(5)
                 st.switch_page("pages/3_result.py")
 
-
-#Сохранение результатов в csv-файл
