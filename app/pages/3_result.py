@@ -1,5 +1,5 @@
 import streamlit as st
-from app import classify_diagnosis
+import classify_diagnosis
 from streamlit_lottie import st_lottie
 import json
 import time
