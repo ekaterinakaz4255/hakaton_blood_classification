@@ -10,7 +10,7 @@ st.set_page_config(page_title="SharkLab Assistant", page_icon="🦈", layout="wi
 
 # db conn
 #conn = st.connection('gbd', type='sql')
-sql_engine = sqlalchemy.create_engine('sqlite:///data/gbd.db', echo=False)
+sql_engine = sqlalchemy.create_engine('sqlite:///database/gbd.db', echo=False)
 conn = sql_engine.raw_connection()
 
 @st.cache_resource
@@ -212,7 +212,6 @@ with st.form(key='gbd'):
         mo_leico = st.number_input("Моноциты # (MO#):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
 
     with col10:
-        esr_westergen = st.number_input("ESR_WESTERGEN", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         band_neut = st.number_input("Палочкоядерные нейтрофилы:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         segm_neut = st.number_input("Сегментоядерные нейтрофилы:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
     

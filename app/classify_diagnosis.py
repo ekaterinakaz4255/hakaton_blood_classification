@@ -39,6 +39,7 @@ def calculate_age(df):
 
 # Функция для реализации голосования
 def ensemble_predict(models, X):
+    X = X.drop(columns=["Height", "Weight"])
     predictions = []
     try:
         for model in models:
@@ -233,7 +234,7 @@ def run_pipeline(row):
 # функция классификации
 def diagnosis_classifier(id: int):
     # путь к базе данных
-    db_path = 'data/gbd.db'
+    db_path = 'database/gbd.db'
     try:
         # подключаемся к базе данных
         with sqlite3.connect(db_path) as conn:

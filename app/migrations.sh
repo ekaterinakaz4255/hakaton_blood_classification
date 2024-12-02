@@ -5,8 +5,8 @@ then
     exit 1
 fi
 
-if [ ! -f ./data/gbd.db ]; then
-	sqlite3 ./data/gbd.db <<EOF
+if [ ! -f ./database/gbd.db ]; then
+	sqlite3 ./database/gbd.db <<EOF
 CREATE TABLE IF NOT EXISTS "gbd_ng" (
   "id" INTEGER PRIMARY KEY,
   "Sex" TEXT,
@@ -49,6 +49,6 @@ CREATE TABLE IF NOT EXISTS "gbd_ng" (
 CREATE INDEX "ix_gbd_ng_index"ON "gbd_ng" ("id");
 EOF
 else 
-	echo "./data/gbd.db already exist"
+	echo "./database/gbd.db already exist"
 fi
 
