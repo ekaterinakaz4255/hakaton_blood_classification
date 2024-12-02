@@ -236,7 +236,7 @@ docker build -t hakaton2024 .
 Запуск веб-сервиса
 
 ```
-docker run -it --rm -p 8501:8501 -v $PWD/data:/app/data --name=hakaton_container hakaton2024
+docker run -it --rm -p 8501:8501 -v $PWD/database:/app/database --name=hakaton_container hakaton2024
 ```
 
 Далее Вас автоматически перенаправят в браузер на веб-сервис или перейдите самостоятельно по ссылкам, предложенным в терминале 
@@ -250,7 +250,7 @@ docker run -it --rm -p 8501:8501 -v $PWD/data:/app/data --name=hakaton_container
 docker pull ekaterinakaz4255/hakaton2024
 
 # Запустите контейнер
-docker run -it --rm -p 8501:8501 -v $PWD/data:/app/data --name=blood_container ekaterinakaz4255/hakaton2024
+docker run -it --rm -p 8501:8501 -v $PWD/database:/app/database --name=blood_container ekaterinakaz4255/hakaton2024
 ```
 Далее Вас автоматически перенаправят в браузер на веб-сервис или перейдите самостоятельно по ссылкам, предложенным в терминале 
 
