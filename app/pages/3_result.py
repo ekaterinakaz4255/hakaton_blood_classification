@@ -49,35 +49,23 @@ st.markdown(
 
 # Две колонки: текст справа, изображение слева
 col1, col2 = st.columns([1, 1], vertical_alignment="center")
-#Текс
+#Текст результата
 with col1:
-    st.markdown(
-        """
-        <div class="info-box">
-           <h2 align="center"><b>Акулье одобрение!</b></h2> 
-           <h3 align="center">Но для ещё более бодрого плавания по жизни советую заглянуть к врачу на 
-           плановый осмотр и поработать над весом с помощью питания и упражнений!</h3>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-#Изображение
-with col2:
-    st.image("images/image2.png", width=450, use_container_width=False)
-
-    st.write("")
-    #col3, col4, col5 = st.columns([1, 1, 1])
-    with st.spinner("The magic of our AI has started...."):
+    with st.spinner("Наши акульи мозги заработали на полную... ждем результатов!✨🦈"):
         time.sleep(10)
         try:
             form_id = st.session_state['user_form_id']
             label =  classify_diagnosis.diagnosis_classifier(form_id)
-            st.success("We predict your diagnose to be: "+ label)
+            st.success(label)
         except KeyError:
-                st.error("Can't find requested form results")
+                st.error("Упс, наши акульи сенсоры не обнаружили результатов... 🦈💦")
         except Exception as e:
-                st.error(f"We apologize something went wrong 🙇 {e}")
+                st.error(f"Мы извиняемся, кажется, наши акульи сенсоры запутались в потоке данных... 🦈💧 🙇 {e}")
     
-    #with col4:
         if st.button("Хочешь заполнить еще раз?"):
             st.switch_page("pages/2_form.py")
+#Изображение
+with col2:
+    st.image("images/image2.png", width=450, use_container_width=False)
+
+    
