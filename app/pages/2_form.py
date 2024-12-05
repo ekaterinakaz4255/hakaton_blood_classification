@@ -1,6 +1,5 @@
 import streamlit as st
 import sqlalchemy
-from sqlalchemy.orm import Session
 import datetime
 import pandas as pd
 import time
@@ -9,14 +8,7 @@ import time
 st.set_page_config(page_title="SharkLab Assistant", page_icon="🦈", layout="wide")
 
 # db conn
-#conn = st.connection('gbd', type='sql')
-sql_engine = sqlalchemy.create_engine('sqlite:///database/gbd.db', echo=False)
-conn = sql_engine.raw_connection()
-
-@st.cache_resource
-def get_database_session():
-    # Create a database session object that points to the URL.
-    return Session(sql_engine)
+sql_engine = sqlalchemy.create_engine('sqlite:///database/gbd.db', echo=False,  connect_args={'timeout': 10})
 
 # CSS-стили для размещения элементов
 st.markdown(
@@ -29,9 +21,9 @@ st.markdown(
         border-radius: 10px;
         font-size: 14px;
         color: #15aabf;
-        position: absolute; 
+        position: absolute;
         left: 40%;
-        margin-top: -20%;  
+        margin-top: -20%;
         transform: translateX(0%);
     }
     .stButton>button {
@@ -87,7 +79,7 @@ with st.form(key='gbd'):
         unsafe_allow_html=True,
     )
     col1, col2 = st.columns([1, 1])
-    
+
     #Форма для ввода пола и даты рождения
     with col1:
         gender = st.selectbox("Пол: *", ["Мужской", "Женский"])
@@ -115,6 +107,7 @@ with st.form(key='gbd'):
         unsafe_allow_html=True,
     )
 
+
     #Формы для ввода параметров ОАК обязательные
     st.markdown(
         """
@@ -137,8 +130,8 @@ with st.form(key='gbd'):
         rbs = st.number_input("Эритроциты (RBC), $10^{12}$/л: *", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         plt = st.number_input("Трмбоциты (PLT), $10^9$/л: *", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         hct = st.number_input("Гематокрит (HCT), %: *", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
-        hgb = st.number_input("Гемоглобин (HGB), г/л: *", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f") 
-   
+        hgb = st.number_input("Гемоглобин (HGB), г/л: *", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
+
     with col4:
         mcv = st.number_input("Средний объем эритроцита (MCV), фл: *", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         mch = st.number_input("Среднее содержание гемоглобина в эритроците (MCH), пг: *", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
@@ -174,13 +167,14 @@ with st.form(key='gbd'):
         mpv = st.number_input("Средний объем тромбоцита (MPV), фл:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         pdw = st.number_input("Распределение тромбоцитов по объему (PDW), %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         rdw = st.number_input("Распределение эритроцитов по объему (RDW), %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
-   
+
     with col7:
         rdw_sd = st.number_input("Распределение эритроцитов по объему, стандартное отклонение (RDW-SD), фл:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         rdw_cv = st.number_input("Распределение эритроцитов по объему, коеффициент вариации (RDW-CV), %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         color_index = st.number_input("Цветовой индекс (CI):", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         esr_westergen = st.number_input("СОЭ, мм/час:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
-    
+
+
     with col8:
         ly_rel = st.number_input("Лимфоциты, относительное количество (LY%), %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         mo_rel = st.number_input("Моноциты, относительное количество (MO%), %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
@@ -214,7 +208,7 @@ with st.form(key='gbd'):
     with col10:
         band_neut = st.number_input("Палочкоядерные нейтрофилы, %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         segm_neut = st.number_input("Сегментоядерные нейтрофилы, %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
-    
+
     with col11:
         eo_leico = st.number_input("Эозинофилы (EO#), %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
         ba_leico = st.number_input("Базофилы (BA#), %:", value=None, min_value=0.0, max_value=1000.0, step=0.1, format="%.1f")
@@ -239,13 +233,11 @@ with st.form(key='gbd'):
         'BA_REL', 'COLOR_INDEX',  'BAND_NEUT',
         'SEGM_NEUT', 'LY_LEICO', 'MO_LEICO', 'EO_LEICO', 'BA_LEICO', 'ESR_Westergren'
         ])
-                with get_database_session() as session:
+                with sql_engine.connect() as conn:
                     df.to_sql("gbd_ng", conn, if_exists="append", index=False)
-                    res = conn.execute('SELECT max(id) FROM gbd_ng')
-                    session.commit()
+                    res = conn.execute(sqlalchemy.text('SELECT max(id) FROM gbd_ng'))
                 for row in res:
                     last_id = int(str(row[0]))
                 st.session_state['user_form_id'] = last_id
                 st.success("Форма успешно отправлена!")
                 st.switch_page("pages/3_result.py")
-
