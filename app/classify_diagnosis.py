@@ -11,6 +11,8 @@ from norms import check_norms
 
 models_dir = "models/"
 icd10_mapping_path = "data/icd10_mapping.json"
+output_predictions_path = "data/ensemble_predictions.csv"
+output_text_path = "data/ensemble_results.txt"
 
 # Функция для загрузки моделей
 def load_models(models_dir):
@@ -219,11 +221,17 @@ def run_pipeline(row):
         icd10_mapping = json.load(f)
         
     print("Предсказание ансамбля моделей...")
-    predictions = ensemble_predict(models, df)  
+    predictions = ensemble_predict(models, df)
+    
+    print("Сохранение предсказаний...")
+    df["Predicted ICD-10"] = predictions
+    df.to_csv(output_predictions_path, index=False)
     
     # 6) Генерация текстового сообщения и формирование рекомендации для пользователя
     print("Генерация текстового сообщения...")
     patient_text = generate_text_message(predictions, icd10_mapping, df)
+    with open(output_text_path, "w") as f:
+        f.write(patient_text)
     
     print("Генерация рекомендаций...")
     recommendation = generate_recommendation(patient_text)
